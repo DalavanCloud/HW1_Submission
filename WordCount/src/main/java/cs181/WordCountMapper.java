@@ -21,7 +21,7 @@ public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritabl
 	    private final IntWritable one = new IntWritable(1);
 	    private Text word = new Text();
 	    private String pattern = "^[a-z][a-z0-9]*$";
-	    private String stopwords = "^a|the|as|an|and$";
+	    private String stopWords = "^a|an|the|as|and$";
 	    private String punctuation = "^[a-z0-9]*+[!.;:\\\\?]$";
 	    
 	    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
@@ -35,13 +35,13 @@ public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritabl
 	            word.set(tokenizer.nextToken());
 	            String stringWord = word.toString().toLowerCase();
 	            
-	            /* Take out the ending punctuation */
+	            /* Remove punctuation at the end */
 	            if (stringWord.matches(punctuation)) {
 	            		stringWord = stringWord.substring(0, stringWord.length() - 1);
 	            }
 	            
 	            /* for each word, output the word as the key, and value as 1 */
-	            if (stringWord.matches(pattern) && !stringWord.matches(stopwords)) {
+	            if (stringWord.matches(pattern) && !stringWord.matches(stopWords)) {
 	                context.write(new Text(stringWord), one);
 	            }
 	            
